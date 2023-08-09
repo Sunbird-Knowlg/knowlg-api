@@ -17,7 +17,6 @@
         <module>schema-validator</module>
         <module>platform-cache</module>
         <module>cassandra-connector</module>
-        <module>kafka-client</module>
     </modules>
 
     <dependencies>
