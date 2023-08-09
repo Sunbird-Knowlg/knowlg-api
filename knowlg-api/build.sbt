@@ -22,11 +22,4 @@ lazy val root = (project in file("."))
       "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.3" % Test
     )
   )
-//  .settings(
-//    libraryDependencies += ("org.sunbird" % "taxonomy-actors" % "1.0-SNAPSHOT")
-//      .exclude("com.typesafe.akka","akka-actor_2.11")
-//      .exclude("org.scala-lang.modules","scala-java8-compat_2.11")
-//      .exclude("org.scala-lang.modules","scala-parser-combinators_2.11")
-//      .exclude("com.typesafe.akka","akka-slf4j_2.11")
-//  )
   resolvers += "Local Maven Repository" at "file:///"+Path.userHome+"/.m2/repository"
