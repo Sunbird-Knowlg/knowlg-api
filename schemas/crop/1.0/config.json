@@ -1,0 +1,44 @@
+{
+  "restrictProps": {
+    "create" : [
+      "status"
+    ],
+    "copy" : [
+      "status"
+    ],
+    "update": []
+  },
+  "objectType": "Crop",
+  "external": {},
+  "relations": {},
+  "version": "enable",
+  "versionCheckMode": "ON",
+  "frameworkCategories": [],
+  "orgFrameworkTerms": [],
+  "targetFrameworkTerms": [],
+  "cacheEnabled": true,
+  "schema_restrict_api": false,
+  "transitions": [
+    {
+      "name": "Review",
+      "action": "review",
+      "from": ["Draft", "FlagDraft"],
+      "to": "Review",
+      "required": [
+        "name",
+        "Licence",
+        "status"
+      ]
+    },
+    {
+      "name": "Publish",
+      "action": "publish",
+      "from": ["Review"],
+      "to": "Live",
+      "required": [
+        "name",
+        "status"
+      ]
+    }
+  ]
+}
