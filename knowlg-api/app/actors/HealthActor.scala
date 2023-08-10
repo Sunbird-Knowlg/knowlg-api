@@ -1,4 +1,4 @@
-package org.sunbird.content.actors
+package actors
 
 import javax.inject.Inject
 import org.sunbird.actor.core.BaseActor

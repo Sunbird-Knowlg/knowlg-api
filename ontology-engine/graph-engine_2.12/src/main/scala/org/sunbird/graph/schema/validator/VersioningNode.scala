@@ -11,13 +11,12 @@ import org.sunbird.graph.OntologyEngineContext
 import org.sunbird.graph.common.enums.AuditProperties
 import org.sunbird.graph.dac.model.Node
 import org.sunbird.graph.exception.GraphErrorCodes
-import org.sunbird.graph.external.ExternalPropsManager
+//import org.sunbird.graph.external.ExternalPropsManager
 import org.sunbird.graph.schema.{DefinitionFactory, IDefinition}
-import org.sunbird.graph.service.operation.{NodeAsyncOperations, SearchAsyncOperations}
 import org.sunbird.graph.utils.{NodeUtil, ScalaJsonUtils}
 import org.sunbird.telemetry.logger.TelemetryManager
 
-import scala.collection.convert.ImplicitConversions._
+//import scala.collection.convert.ImplicitConversions._
 import scala.concurrent.{ExecutionContext, Future}
 
 trait VersioningNode extends IDefinition {
@@ -93,14 +92,15 @@ trait VersioningNode extends IDefinition {
                             node.getMetadata.put(AuditProperties.lastStatusChangedOn.name, DateUtils.formatCurrentDate())
                             oec.graphService.addNode(node.getGraphId, node).map(imgNode => {
                                 imgNode.getMetadata.put("isImageNodeCreated", "yes");
-                                copyExternalProps(identifier, node.getGraphId, imgNode.getObjectType.toLowerCase().replace("image", "")).map(response => {
-                                    if(!ResponseHandler.checkError(response)) {
-                                        if(null != response.getResult && !response.getResult.isEmpty)
-                                            imgNode.setExternalData(response.getResult)
-                                    }
-                                    imgNode
-                                })
-                            }).flatMap(f=>f)
+                                imgNode
+//                                copyExternalProps(identifier, node.getGraphId, imgNode.getObjectType.toLowerCase().replace("image", "")).map(response => {
+//                                    if(!ResponseHandler.checkError(response)) {
+//                                        if(null != response.getResult && !response.getResult.isEmpty)
+//                                            imgNode.setExternalData(response.getResult)
+//                                    }
+//                                    imgNode
+//                                })
+                            }).map(f=>f)
                         } else
                             throw e.getCause
                     }
@@ -110,25 +110,25 @@ trait VersioningNode extends IDefinition {
             Future{node}
     }
 
-    private def copyExternalProps(identifier: String, graphId: String, schemaName: String)(implicit ec: ExecutionContext, oec: OntologyEngineContext) = {
-        val request = new Request()
-        request.setContext(new util.HashMap[String, AnyRef](){{
-            put("schemaName", schemaName)
-            put("version", getSchemaVersion())
-            put("graph_id", graphId)
-        }})
-        request.put("identifier", identifier)
-        oec.graphService.readExternalProps(request, getExternalPropsList(graphId, schemaName, getSchemaVersion()))
-    }
+//    private def copyExternalProps(identifier: String, graphId: String, schemaName: String)(implicit ec: ExecutionContext, oec: OntologyEngineContext) = {
+//        val request = new Request()
+//        request.setContext(new util.HashMap[String, AnyRef](){{
+//            put("schemaName", schemaName)
+//            put("version", getSchemaVersion())
+//            put("graph_id", graphId)
+//        }})
+//        request.put("identifier", identifier)
+//        oec.graphService.readExternalProps(request, getExternalPropsList(graphId, schemaName, getSchemaVersion()))
+//    }
 
-    private def getExternalPropsList(graphId: String, schemaName: String, version: String)(implicit ec: ExecutionContext, oec: OntologyEngineContext): List[String] ={
-        val definition = DefinitionFactory.getDefinition(graphId, schemaName, version)
-        if(definition.schemaValidator.getConfig.hasPath("external.properties")){
-            new util.ArrayList[String](definition.schemaValidator.getConfig.getObject("external.properties").keySet()).toList
-        }else{
-            List[String]()
-        }
-    }
+//    private def getExternalPropsList(graphId: String, schemaName: String, version: String)(implicit ec: ExecutionContext, oec: OntologyEngineContext): List[String] ={
+//        val definition = DefinitionFactory.getDefinition(graphId, schemaName, version)
+//        if(definition.schemaValidator.getConfig.hasPath("external.properties")){
+//            new util.ArrayList[String](definition.schemaValidator.getConfig.getObject("external.properties").keySet()).toList
+//        }else{
+//            List[String]()
+//        }
+//    }
 
     def getCachedNode(identifier: String, ttl: Integer)(implicit oec: OntologyEngineContext, ec: ExecutionContext): Future[Node] = {
         val nodeStringFuture: Future[String] = RedisCache.getAsync(identifier, nodeCacheAsyncHandler, ttl)

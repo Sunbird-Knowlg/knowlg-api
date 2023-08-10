@@ -4,7 +4,7 @@ import org.sunbird.common.Platform
 import org.sunbird.common.dto.{Property, Request, Response, ResponseHandler}
 import org.sunbird.common.exception.ResponseCode
 import org.sunbird.graph.dac.model.{Node, SearchCriteria, SubGraph}
-import org.sunbird.graph.external.ExternalPropsManager
+//import org.sunbird.graph.external.ExternalPropsManager
 import org.sunbird.graph.service.operation.{GraphAsyncOperations, Neo4JBoltSearchOperations, NodeAsyncOperations, SearchAsyncOperations}
 import org.sunbird.graph.util.CSPMetaUtil
 
@@ -54,34 +54,34 @@ class GraphService {
     def getNodeByUniqueIds(graphId:String, searchCriteria: SearchCriteria): Future[java.util.List[Node]] = {
         SearchAsyncOperations.getNodeByUniqueIds(graphId, searchCriteria).map(nodes => if(isrRelativePathEnabled) CSPMetaUtil.updateAbsolutePath(nodes) else nodes)
     }
+//
+//    def readExternalProps(request: Request, fields: List[String]): Future[Response] = {
+//        ExternalPropsManager.fetchProps(request, fields).map(res => {
+//            if(isrRelativePathEnabled && res.getResponseCode == ResponseCode.OK) {
+//                val updatedResult = CSPMetaUtil.updateExternalAbsolutePath(res.getResult)
+//                val response = ResponseHandler.OK()
+//                response.putAll(updatedResult)
+//                response
+//            } else res})
+//    }
+//
+//    def saveExternalProps(request: Request): Future[Response] = {
+//        val externalProps: java.util.Map[String, AnyRef] = request.getRequest
+//        val updatedExternalProps = if(isrRelativePathEnabled) CSPMetaUtil.saveExternalRelativePath(externalProps) else externalProps
+//        request.setRequest(updatedExternalProps)
+//        ExternalPropsManager.saveProps(request)
+//    }
 
-    def readExternalProps(request: Request, fields: List[String]): Future[Response] = {
-        ExternalPropsManager.fetchProps(request, fields).map(res => {
-            if(isrRelativePathEnabled && res.getResponseCode == ResponseCode.OK) {
-                val updatedResult = CSPMetaUtil.updateExternalAbsolutePath(res.getResult)
-                val response = ResponseHandler.OK()
-                response.putAll(updatedResult)
-                response
-            } else res})
-    }
-
-    def saveExternalProps(request: Request): Future[Response] = {
-        val externalProps: java.util.Map[String, AnyRef] = request.getRequest
-        val updatedExternalProps = if(isrRelativePathEnabled) CSPMetaUtil.saveExternalRelativePath(externalProps) else externalProps
-        request.setRequest(updatedExternalProps)
-        ExternalPropsManager.saveProps(request)
-    }
-
-    def updateExternalProps(request: Request): Future[Response] = {
-        val externalProps: java.util.Map[String, AnyRef] = request.getRequest
-        val updatedExternalProps = if (isrRelativePathEnabled) CSPMetaUtil.updateExternalRelativePath(externalProps) else externalProps
-        request.setRequest(updatedExternalProps)
-        ExternalPropsManager.update(request)
-    }
-
-    def deleteExternalProps(request: Request): Future[Response] = {
-        ExternalPropsManager.deleteProps(request)
-    }
+//    def updateExternalProps(request: Request): Future[Response] = {
+//        val externalProps: java.util.Map[String, AnyRef] = request.getRequest
+//        val updatedExternalProps = if (isrRelativePathEnabled) CSPMetaUtil.updateExternalRelativePath(externalProps) else externalProps
+//        request.setRequest(updatedExternalProps)
+//        ExternalPropsManager.update(request)
+//    }
+//
+//    def deleteExternalProps(request: Request): Future[Response] = {
+//        ExternalPropsManager.deleteProps(request)
+//    }
     def checkCyclicLoop(graphId:String, endNodeId: String, startNodeId: String, relationType: String) = {
         Neo4JBoltSearchOperations.checkCyclicLoop(graphId, endNodeId, relationType, startNodeId)
     }

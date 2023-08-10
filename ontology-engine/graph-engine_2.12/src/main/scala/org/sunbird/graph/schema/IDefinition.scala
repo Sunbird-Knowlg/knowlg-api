@@ -8,7 +8,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 abstract class IDefinition(graphId: String, schemaName: String, version: String = "1.0", ocd: ObjectCategoryDefinition = ObjectCategoryDefinition())(implicit ec: ExecutionContext, oec: OntologyEngineContext) {//extends CoreDomainObject(graphId, schemaName, version, categoryId) {
 
-    var schemaValidator: ISchemaValidator = if(ocd.categoryName.isBlank) SchemaValidatorFactory.getInstance(schemaName, version) else new CategoryDefinitionValidator(schemaName, version).loadSchema(ocd)
+//    var schemaValidator: ISchemaValidator = if(ocd.categoryName.isBlank) SchemaValidatorFactory.getInstance(schemaName, version) else new CategoryDefinitionValidator(schemaName, version).loadSchema(ocd)
+var schemaValidator: ISchemaValidator = SchemaValidatorFactory.getInstance(schemaName, version)
     
     def getNode(input: java.util.Map[String, AnyRef]): Node
 
